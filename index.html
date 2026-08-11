@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELLO — a short film</title>
+<meta name="description" content="A man is locked out of his apartment. The locksmith needs to be satisfied that it is emotionally his. A four-minute comedy.">
+<meta name="author" content="Wesley Lucas">
+<meta name="theme-color" content="#C3CBB9">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F0EEE5'/%3E%3Ctext x='16' y='23' font-family='Courier New,monospace' font-size='22' font-weight='bold' text-anchor='middle' fill='%2323261F'%3EH%3C/text%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="HELLO — a short film">
+<meta property="og:description" content="A man is locked out of his apartment. The locksmith needs to be satisfied that it is emotionally his. A four-minute comedy.">
+<meta property="og:site_name" content="HELLO">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HELLO — a short film">
+<meta name="twitter:description" content="A man is locked out of his apartment. The locksmith needs to be satisfied that it is emotionally his. A four-minute comedy.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Zilla+Slab:wght@500;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall:#C3CBB9;
+  --wall-deep:#A7B199;
+  --paper:#F0EEE5;
+  --paper-edge:#DBD7C6;
+  --ink:#23261F;
+  --carbon:#6C7364;
+  --stamp:#A93226;
+  --rule:#B9B4A0;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--wall);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 32%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.022) 0 1px, transparent 1px 4px);
+  color:var(--ink);
+  font-family:"Archivo",system-ui,sans-serif;
+  font-size:17px;
+  line-height:1.6;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 90px}
+
+/* ---------- department header ---------- */
+.dept{
+  border-bottom:2px solid var(--ink);
+  padding:14px 0 10px;
+  margin-bottom:34px;
+  display:flex;flex-wrap:wrap;gap:8px 24px;
+  align-items:baseline;justify-content:space-between;
+  font-family:"Courier Prime",monospace;
+  font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+}
+.dept b{font-weight:700}
+.dept span{color:#3c4136}
+
+/* ---------- paper sheet ---------- */
+.sheet{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--paper-edge);
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 14px 28px -22px rgba(0,0,0,.55);
+  padding:44px 40px 40px 62px;
+  margin-bottom:26px;
+}
+.sheet::before,.sheet::after{
+  content:"";position:absolute;left:26px;width:11px;height:11px;
+  border-radius:50%;background:var(--wall);
+  box-shadow:0 1px 1px rgba(0,0,0,.18) inset;
+}
+.sheet::before{top:56px}
+.sheet::after{bottom:56px}
+
+/* ---------- section labels ---------- */
+.sec{
+  font-family:"Courier Prime",monospace;
+  font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--carbon);
+  border-bottom:1px solid var(--rule);
+  padding-bottom:7px;margin-bottom:22px;
+  display:flex;justify-content:space-between;gap:16px;
+}
+h2{
+  font-family:"Zilla Slab",Georgia,serif;font-weight:700;
+  font-size:clamp(1.5rem,3.6vw,2.1rem);line-height:1.15;
+  margin:0 0 16px;letter-spacing:-.01em;
+}
+p{margin:0 0 15px;max-width:60ch}
+p:last-child{margin-bottom:0}
+
+/* ---------- hero ---------- */
+.hero{padding-top:52px}
+.title{
+  font-family:"Courier Prime",monospace;font-weight:700;
+  font-size:clamp(3.6rem,17vw,10.5rem);
+  line-height:.86;margin:0;letter-spacing:.01em;
+}
+.typed{
+  display:inline-block;
+  border-bottom:3px solid var(--ink);
+  padding:0 .06em .04em;
+}
+.logline{
+  font-family:"Zilla Slab",Georgia,serif;font-weight:500;
+  font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.4;
+  margin:30px 0 0;max-width:34ch;
+}
+.specs{
+  margin-top:28px;padding-top:14px;border-top:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;gap:6px 32px;
+  font-family:"Courier Prime",monospace;font-size:12.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--carbon);
+}
+.specs b{color:var(--ink);font-weight:700}
+
+/* ---------- assessment ---------- */
+.q{margin-bottom:26px}
+.q-num{
+  font-family:"Courier Prime",monospace;font-size:11.5px;
+  letter-spacing:.16em;color:var(--carbon);text-transform:uppercase;
+  display:block;margin-bottom:5px;
+}
+.q-text{
+  font-family:"Zilla Slab",Georgia,serif;font-weight:500;
+  font-size:1.16rem;line-height:1.35;margin:0 0 12px;
+}
+.field{
+  width:100%;max-width:430px;background:transparent;
+  border:0;border-bottom:1.5px solid var(--ink);
+  font-family:"Courier Prime",monospace;font-size:16px;color:var(--ink);
+  padding:6px 2px;border-radius:0;
+}
+.field:focus{outline:2px solid var(--stamp);outline-offset:4px}
+.field::placeholder{color:#9ea395}
+.choices{display:flex;flex-wrap:wrap;gap:10px 22px}
+.choice{
+  display:flex;align-items:center;gap:9px;cursor:pointer;
+  font-family:"Courier Prime",monospace;font-size:14.5px;
+}
+.choice input{
+  appearance:none;-webkit-appearance:none;margin:0;
+  width:16px;height:16px;flex:none;
+  border:1.5px solid var(--ink);background:transparent;border-radius:0;
+  display:grid;place-content:center;cursor:pointer;
+}
+.choice input:checked::after{
+  content:"×";font-family:"Courier Prime",monospace;
+  font-size:19px;line-height:1;color:var(--ink);margin-top:-2px;
+}
+.choice input:focus-visible{outline:2px solid var(--stamp);outline-offset:3px}
+
+.submit{
+  font-family:"Courier Prime",monospace;font-weight:700;
+  font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);
+  border:0;border-radius:0;padding:14px 26px;cursor:pointer;
+  transition:background .16s ease;
+}
+.submit:hover{background:var(--stamp)}
+.submit:focus-visible{outline:2px solid var(--stamp);outline-offset:4px}
+
+.verdict{
+  margin-top:30px;padding-top:24px;border-top:1px solid var(--rule);
+  display:none;
+}
+.verdict.show{display:block}
+.stamp{
+  display:inline-block;
+  font-family:"Courier Prime",monospace;font-weight:700;
+  font-size:clamp(2rem,7vw,3.4rem);letter-spacing:.1em;
+  color:var(--stamp);border:4px solid var(--stamp);
+  padding:6px 20px 8px;transform:rotate(-3.5deg);
+  opacity:.87;
+}
+.verdict.show .stamp{animation:land .28s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes land{
+  from{transform:rotate(-3.5deg) scale(1.7);opacity:0}
+  to{transform:rotate(-3.5deg) scale(1);opacity:.87}
+}
+.reason{
+  font-family:"Courier Prime",monospace;font-size:14px;line-height:1.65;
+  margin:20px 0 0;max-width:52ch;color:#3c4136;
+}
+
+/* ---------- data rows ---------- */
+.rows{border-top:1px solid var(--rule)}
+.row{
+  display:flex;flex-wrap:wrap;gap:2px 18px;
+  padding:11px 0;border-bottom:1px solid var(--rule);
+}
+.row dt{
+  flex:0 0 210px;
+  font-family:"Courier Prime",monospace;font-size:11.5px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--carbon);
+  padding-top:3px;margin:0;
+}
+.row dd{margin:0;flex:1 1 220px;font-weight:500}
+.row dd em{font-style:normal;color:var(--carbon);font-weight:400}
+
+/* ---------- checklist ---------- */
+.check{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
+.check li{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:12px 0;border-bottom:1px solid var(--rule);
+}
+.box{
+  flex:none;width:17px;height:17px;margin-top:3px;
+  border:1.5px solid var(--ink);
+  display:grid;place-content:center;
+  font-family:"Courier Prime",monospace;font-size:19px;line-height:1;
+}
+.box.done::after{content:"×";margin-top:-3px}
+.check .lab{font-weight:500}
+.check .when{
+  display:block;
+  font-family:"Courier Prime",monospace;font-size:11.5px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--carbon);
+  margin-top:2px;
+}
+
+/* ---------- contact ---------- */
+.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.links a{
+  font-family:"Courier Prime",monospace;font-weight:700;
+  font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;
+  border:1.5px solid var(--ink);padding:12px 20px;
+  transition:background .16s ease,color .16s ease;
+}
+.links a:hover{background:var(--ink);color:var(--paper)}
+.links a:focus-visible{outline:2px solid var(--stamp);outline-offset:3px}
+
+/* ---------- carbon footer ---------- */
+.carbon{margin-top:30px}
+.strips{display:flex;height:9px;border:1px solid var(--paper-edge)}
+.strips i{flex:1}
+.strips i:nth-child(1){background:#F0EEE5}
+.strips i:nth-child(2){background:#E8DFAF}
+.strips i:nth-child(3){background:#E2C2C4}
+.fine{
+  font-family:"Courier Prime",monospace;font-size:11px;
+  letter-spacing:.13em;text-transform:uppercase;color:#4a5044;
+  margin:12px 0 0;display:flex;flex-wrap:wrap;gap:4px 26px;
+}
+
+@media (max-width:640px){
+  .sheet{padding:32px 22px 30px 40px}
+  .sheet::before,.sheet::after{left:16px}
+  .row dt{flex:0 0 100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="dept">
+    <b>Form 4B · Residency Assessment</b>
+    <span>Point Park University · Cinema Arts · Production 2</span>
+  </header>
+
+  <section class="sheet hero">
+    <h1 class="title"><span class="typed">HELLO</span></h1>
+    <p class="logline">A man is locked out of his apartment. The locksmith needs to be satisfied that it is emotionally his.</p>
+    <div class="specs">
+      <span><b>4 min</b> · comedy</span>
+      <span>Written &amp; directed by <b>Wesley Lucas</b></span>
+      <span>Fall <b>2026</b></span>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sec"><span>Section I — Assessment</span><span>Complete in full</span></div>
+    <h2>Before you continue, the door has some questions.</h2>
+
+    <form id="assess" novalidate>
+      <div class="q">
+        <span class="q-num">Question one</span>
+        <p class="q-text">Whose apartment is this?</p>
+        <input class="field" id="q1" type="text" placeholder="Type your answer" autocomplete="off">
+      </div>
+
+      <div class="q">
+        <span class="q-num">Question two</span>
+        <p class="q-text">Does it agree?</p>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="q2" value="yes">It does</label>
+          <label class="choice"><input type="radio" name="q2" value="no">It does not</label>
+          <label class="choice"><input type="radio" name="q2" value="unsure">I have never asked</label>
+        </div>
+      </div>
+
+      <div class="q">
+        <span class="q-num">Question seven</span>
+        <p class="q-text">When you come home and nobody is there, do you say anything?</p>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="q7" value="hello">I say hello</label>
+          <label class="choice"><input type="radio" name="q7" value="silent">I don't</label>
+        </div>
+      </div>
+
+      <button class="submit" type="submit">Submit assessment</button>
+    </form>
+
+    <div class="verdict" id="verdict" role="status" aria-live="polite">
+      <span class="stamp">DENIED</span>
+      <p class="reason" id="reason"></p>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sec"><span>Section II — Synopsis</span><span>Attach if needed</span></div>
+    <h2>Everyone in the building thinks this is normal.</h2>
+    <p>Marcus has been sitting in his own hallway for two hours, kinda like waiting in limbo. When the locksmith finally arrives, he doesn't bring tools — he brings a clipboard, sits down on his toolbox, and starts running through this standardized assessment to figure out whether the apartment belongs to Marcus at all.</p>
+    <p>He is unfailingly polite. He never raises his voice, not even a little. And, honestly, he would genuinely like Marcus to pass. Meanwhile a neighbor drifts out to watch, offers a small correction about the color of the kitchen and answers the questions considerably better than Marcus does.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="sec"><span>Section III — Personnel</span><span>All entries required</span></div>
+    <h2>Cast &amp; crew</h2>
+    <dl class="rows">
+      <div class="row"><dt>Writer / Director</dt><dd>Wesley Lucas</dd></div>
+      <div class="row"><dt>Marcus</dt><dd>Trey Treadwell</dd></div>
+      <div class="row"><dt>Voss</dt><dd>Nico Rich</dd></div>
+      <div class="row"><dt>Greta</dt><dd>Amara Perez</dd></div>
+      <div class="row"><dt>Cinematographer</dt><dd><em>To be assigned</em></dd></div>
+      <div class="row"><dt>Editor / Sound Design</dt><dd><em>To be assigned</em></dd></div>
+      <div class="row"><dt>Location Sound</dt><dd><em>To be assigned</em></dd></div>
+    </dl>
+  </section>
+
+  <section class="sheet">
+    <div class="sec"><span>Section IV — Status</span><span>Updated weekly</span></div>
+    <h2>Where the film currently is</h2>
+    <ul class="check">
+      <li><span class="box done"></span><span><span class="lab">Script locked</span><span class="when">Complete</span></span></li>
+      <li><span class="box done"></span><span><span class="lab">Table read &amp; revisions</span><span class="when">Complete</span></span></li>
+      <li><span class="box done"></span><span><span class="lab">Casting — three roles</span><span class="when">Complete</span></span></li>
+      <li><span class="box"></span><span><span class="lab">Location secured</span><span class="when">Scouting hallways</span></span></li>
+      <li><span class="box"></span><span><span class="lab">Pre-production package</span><span class="when">In progress</span></span></li>
+      <li><span class="box"></span><span><span class="lab">Principal photography</span><span class="when">One weekend · date TBA</span></span></li>
+      <li><span class="box"></span><span><span class="lab">Rough cut screening</span><span class="when">Scheduled</span></span></li>
+      <li><span class="box"></span><span><span class="lab">Final delivery</span><span class="when">End of semester showcase</span></span></li>
+    </ul>
+  </section>
+
+  <section class="sheet">
+    <div class="sec"><span>Section V — Correspondence</span><span>Keep a copy</span></div>
+    <h2>Get in touch</h2>
+    <p>Crew, hallways, and anyone who owns a very ordinary beige corridor: I would like to hear from you.</p>
+    <div class="links">
+      <a href="https://www.instagram.com/wesleylucasfilms/" target="_blank" rel="noopener">Follow on Instagram</a>
+      <a href="mailto:wesley.lucas@pointpark.edu">Email the production</a>
+    </div>
+  </section>
+
+  <div class="carbon">
+    <div class="strips"><i></i><i></i><i></i></div>
+    <p class="fine">
+      <span>File copy · Applicant copy · Building copy</span>
+      <span>Retain for your records</span>
+    </p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('assess');
+  var verdict = document.getElementById('verdict');
+  var reason = document.getElementById('reason');
+
+  function pick(name){
+    var el = form.querySelector('input[name="'+name+'"]:checked');
+    return el ? el.value : null;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var q1 = document.getElementById('q1').value.trim();
+    var q2 = pick('q2');
+    var q7 = pick('q7');
+    var note;
+
+    if(!q1){
+      note = 'Question one was left blank. This has been recorded as an answer.';
+    } else if(q7 === 'hello'){
+      note = 'You say hello. The apartment has no record of hearing it. Assessment closed.';
+    } else if(q2 === 'yes'){
+      note = 'You state that the apartment agrees. The apartment was not consulted.';
+    } else if(q2 === 'unsure'){
+      note = 'Twenty-two years is the current average. You may reapply at any time.';
+    } else {
+      note = 'Your answers were consistent, which is not the same as correct.';
+    }
+
+    reason.textContent = note + ' Applicant may reapply in person. Bring the form.';
+    verdict.classList.remove('show');
+    void verdict.offsetWidth;
+    verdict.classList.add('show');
+    verdict.scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+})();
+</script>
+</body>
+</html>

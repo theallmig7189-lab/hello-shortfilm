@@ -360,6 +360,31 @@ p:last-child{margin-bottom:0}
 
 .print-only{display:none}
 
+/* ---------- scroll: one sheet at a time -------------------------------
+   The file is a stack of pages, so scrolling settles page to page rather
+   than drifting. `proximity` rather than `mandatory` on purpose: a
+   mandatory scroller fights the reader on any sheet taller than the
+   viewport and can put content out of reach. Only the site snaps — the
+   gate is its own scroller and a form should scroll like a form.
+   -------------------------------------------------------------------- */
+html{scroll-snap-type:y proximity}
+.site .sheet{
+  scroll-snap-align:start;
+  scroll-snap-stop:normal;
+  /* Clears the sticky provisional bar, whose height changes when it wraps
+     on narrow viewports — --bar is measured at runtime. */
+  scroll-margin-top:calc(var(--bar, 57px) + 18px);
+}
+/* The hero is the landing view. If it snaps, the department header above
+   it gets pulled off screen and the page never rests at its own top. */
+.site .hero{scroll-snap-align:none}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+}
+@media print{
+  html{scroll-snap-type:none;scroll-behavior:auto}
+}
+
 @media (max-width:640px){
   .sheet{padding:32px 22px 30px 40px}
   .sheet::before,.sheet::after{left:16px}
@@ -874,7 +899,11 @@ p:last-child{margin-bottom:0}
     }
     body.classList.remove('gated');
     body.classList.add('cleared');
-    window.scrollTo(0,0);
+    /* Explicitly instant: html has scroll-behavior:smooth, and an animated
+       scroll here would fight the view transition. */
+    try { window.scrollTo({ top:0, left:0, behavior:'instant' }); }
+    catch(err){ window.scrollTo(0,0); }
+    measureBar();
   }
 
   document.getElementById('proceed').addEventListener('click', function(e){
@@ -894,6 +923,20 @@ p:last-child{margin-bottom:0}
       unlock();
     }
   });
+
+  /* Keep --bar in step with the sticky bar's real height so snapped
+     sections never land underneath it. It wraps to two lines on narrow
+     viewports, so this can't be a constant. */
+  var provisional = document.getElementById('provisional');
+  function measureBar(){
+    var h = provisional.getBoundingClientRect().height;
+    if(h > 0){ document.documentElement.style.setProperty('--bar', Math.round(h) + 'px'); }
+  }
+  if(window.ResizeObserver){
+    new ResizeObserver(measureBar).observe(provisional);
+  } else {
+    window.addEventListener('resize', measureBar);
+  }
 
   /* focus the first field once the door is up */
   try { q1.focus({ preventScroll:true }); } catch(err){ q1.focus(); }

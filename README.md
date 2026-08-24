@@ -31,6 +31,20 @@ Details that make it work:
 - **Denials vary** by your answers, so two people who compare notes were
   rejected for different reasons.
 
+## Printing — this is a feature, not an afterthought
+
+The site is a form, so it prints as one, and what comes out depends on
+where you are when you hit print:
+
+- **At the gate** → a blank Form 4B. Every question prints, including ones
+  the visitor never unlocked, with fields ruled at 8mm for handwriting and
+  `form4b.com` set across the footer. **This is the door-hanger asset** —
+  the print handout and the website are the same object in two media.
+- **Past the gate** → the file, with your assessment on record.
+
+Backgrounds drop out, the fixed overlay is un-fixed so it paginates,
+sheets avoid breaking mid-section, and link URLs expand inline.
+
 ## Structure
 
 ```

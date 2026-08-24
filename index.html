@@ -30,6 +30,11 @@
   --carbon:#6C7364;
   --stamp:#A93226;
   --rule:#B9B4A0;
+
+  /* Paper fibre and wall tooth, generated with feTurbulence so there are
+     no image files to ship. Fine grain on the sheets, coarser on the wall. */
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.05'/%3E%3C/svg%3E");
+  --tooth:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23t)' opacity='0.045'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -37,6 +42,7 @@ body{
   margin:0;
   background:var(--wall);
   background-image:
+    var(--tooth),
     linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 32%),
     repeating-linear-gradient(90deg, rgba(0,0,0,.022) 0 1px, transparent 1px 4px);
   color:var(--ink);
@@ -73,9 +79,15 @@ body.cleared .provisional{display:flex}
 /* ---------- paper sheet ---------- */
 .sheet{
   position:relative;
-  background:var(--paper);
+  background-color:var(--paper);
+  background-image:var(--grain);
   border:1px solid var(--paper-edge);
-  box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 14px 28px -22px rgba(0,0,0,.55);
+  /* asymmetric by a hair, so the sheet reads as cut paper rather than a div */
+  border-radius:1px 2px 1px 2px / 2px 1px 2px 1px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.6) inset,
+    0 1px 2px -1px rgba(0,0,0,.28),
+    0 16px 30px -24px rgba(0,0,0,.6);
   padding:44px 40px 40px 62px;
   margin-bottom:26px;
 }
@@ -224,6 +236,7 @@ p:last-child{margin-bottom:0}
   overflow-y:auto;-webkit-overflow-scrolling:touch;
   background:var(--wall);
   background-image:
+    var(--tooth),
     linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 32%),
     repeating-linear-gradient(90deg, rgba(0,0,0,.022) 0 1px, transparent 1px 4px);
 }
@@ -345,6 +358,8 @@ p:last-child{margin-bottom:0}
   margin:12px 0 0;display:flex;flex-wrap:wrap;gap:4px 26px;
 }
 
+.print-only{display:none}
+
 @media (max-width:640px){
   .sheet{padding:32px 22px 30px 40px}
   .sheet::before,.sheet::after{left:16px}
@@ -352,6 +367,100 @@ p:last-child{margin-bottom:0}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+
+/* ---------- the unlock, directed -------------------------------------
+   The denial stamp on the gate and the DENIED chip filed in Section I
+   share a view-transition-name, so the stamp travels down into the file
+   instead of the gate jump-cutting away. Only one is ever rendered at a
+   time (gate and site are mutually display:none), which is what keeps
+   the shared name legal.
+   -------------------------------------------------------------------- */
+.gate .stamp{view-transition-name:denial-stamp}
+.filed .no{view-transition-name:denial-stamp}
+
+::view-transition-group(denial-stamp){animation-duration:.6s}
+::view-transition-old(root),
+::view-transition-new(root){mix-blend-mode:normal}
+::view-transition-old(root){animation:vt-out .34s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:vt-in .46s .05s cubic-bezier(0,0,.2,1) both}
+@keyframes vt-out{to{opacity:0;transform:scale(.986) translateY(-6px)}}
+@keyframes vt-in{from{opacity:0;transform:scale(1.006)}}
+
+/* ---------- print ----------------------------------------------------
+   The site is a form, so it should come out of a printer as one.
+   Gated  -> prints a blank Form 4B, every question revealed, ruled for
+             hand completion. That is the door-hanger asset.
+   Cleared -> prints the file, assessment on record.
+   -------------------------------------------------------------------- */
+@media print{
+  @page{margin:16mm 14mm}
+
+  html,body{
+    background:#fff !important;
+    color:#000;
+    font-size:10.5pt;
+    line-height:1.45;
+  }
+  body,.gate{background-image:none !important}
+  body.gated{overflow:visible}
+
+  /* a fixed overlay would print only its first page */
+  .gate{position:static;inset:auto;overflow:visible;height:auto}
+  .gate-inner,.wrap{max-width:none;margin:0;padding:0}
+
+  .sheet{
+    background:#fff;
+    border:1px solid #000;
+    border-radius:0;
+    box-shadow:none;
+    padding:10mm 9mm;
+    margin-bottom:6mm;
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+  .sheet::before,.sheet::after{display:none}
+
+  h2,.gate-head,.title{page-break-after:avoid;break-after:avoid}
+  .sec,.notice,.applicant,.dept{color:#000;border-color:#000}
+
+  /* every question prints, including ones the visitor never unlocked */
+  .q[data-locked]{display:block !important;opacity:1 !important;transform:none !important}
+  .q{page-break-inside:avoid;break-inside:avoid;margin-bottom:7mm}
+  .field{
+    border-bottom:1px solid #000;
+    width:100%;max-width:none;
+    min-height:8mm;
+  }
+  .choice input{border-color:#000}
+
+  .provisional{
+    position:static;
+    background:none;color:#000;
+    border-bottom:2px solid #000;
+    padding:0 0 5px;margin-bottom:10px;
+  }
+  .stamp{color:#000;border-color:#000;opacity:1}
+  .filed .no{color:#000;border-color:#000}
+
+  /* interactive-only affordances have no meaning on paper */
+  .submit,#proceed,.links a[role="button"],.strips{display:none !important}
+
+  .links a{border-color:#000;color:#000;padding:0;border:0}
+  .links a[href^="http"]::after{content:" — " attr(href);font-size:9pt}
+  .links a[href^="mailto:"]::after{content:" — " attr(href);font-size:9pt}
+
+  .print-only{display:block !important}
+  .print-url{
+    font-family:"Courier Prime",monospace;font-weight:700;
+    font-size:13pt;letter-spacing:.2em;text-transform:uppercase;
+    text-align:center;margin:8mm 0 0;padding-top:5mm;
+    border-top:1px solid #000;
+  }
+  .print-url small{
+    display:block;font-weight:400;font-size:8.5pt;
+    letter-spacing:.14em;margin-top:2mm;
+  }
 }
 </style>
 </head>
@@ -427,6 +536,11 @@ p:last-child{margin-bottom:0}
           <a href="#" id="proceed" role="button">Proceed under provisional access</a>
         </div>
       </div>
+
+      <p class="print-only print-url">
+        form4b.com
+        <small>Return completed assessment to the address on file · HELLO, a short film</small>
+      </p>
     </section>
 
     <div class="carbon">
@@ -550,6 +664,11 @@ p:last-child{margin-bottom:0}
         <a href="https://www.instagram.com/wesleylucasfilms/" target="_blank" rel="noopener">Follow on Instagram</a>
         <a href="mailto:wesley.lucas@pointpark.edu">Email the production</a>
       </div>
+
+      <p class="print-only print-url">
+        form4b.com
+        <small>HELLO · a four-minute comedy · Wesley Lucas · Fall 2026</small>
+      </p>
     </section>
 
     <div class="carbon">
@@ -744,8 +863,7 @@ p:last-child{margin-bottom:0}
     else { el.textContent = 'No answer recorded'; el.classList.add('blank'); }
   }
 
-  document.getElementById('proceed').addEventListener('click', function(e){
-    e.preventDefault();
+  function unlock(){
     if(answers){
       put('rec-q1',  answers.q1);
       put('rec-q1b', answers.q1b);
@@ -757,6 +875,24 @@ p:last-child{margin-bottom:0}
     body.classList.remove('gated');
     body.classList.add('cleared');
     window.scrollTo(0,0);
+  }
+
+  document.getElementById('proceed').addEventListener('click', function(e){
+    e.preventDefault();
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(document.startViewTransition && !still){
+      /* A skipped transition (backgrounded tab, another transition already
+         running) rejects .ready. The DOM update still runs either way, so
+         the visitor always gets in — swallow it rather than let it surface
+         as an uncaught rejection. */
+      var vt = document.startViewTransition(unlock);
+      if(vt){
+        if(vt.ready && vt.ready.catch){ vt.ready.catch(function(){}); }
+        if(vt.finished && vt.finished.catch){ vt.finished.catch(function(){}); }
+      }
+    } else {
+      unlock();
+    }
   });
 
   /* focus the first field once the door is up */

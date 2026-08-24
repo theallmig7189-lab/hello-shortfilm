@@ -46,6 +46,17 @@ body{
 }
 .wrap{max-width:920px;margin:0 auto;padding:0 20px 90px}
 
+/* ---------- gate visibility -----------------------------------------
+   The gate is inert until JS arms it by adding .gated to <body>.
+   No JS  ->  no .gated  ->  gate stays hidden, site renders normally.
+   -------------------------------------------------------------------- */
+.gate{display:none}
+body.gated{overflow:hidden}
+body.gated .gate{display:block}
+body.gated .site{display:none}
+.provisional{display:none}
+body.cleared .provisional{display:flex}
+
 /* ---------- department header ---------- */
 .dept{
   border-bottom:2px solid var(--ink);
@@ -118,8 +129,20 @@ p:last-child{margin-bottom:0}
 }
 .specs b{color:var(--ink);font-weight:700}
 
-/* ---------- assessment ---------- */
+/* ---------- questions ---------- */
 .q{margin-bottom:26px}
+.q[data-locked]{
+  display:none;
+  opacity:0;transform:translateY(9px);
+}
+.q.reveal{
+  display:block;
+  animation:slidein .34s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes slidein{
+  from{opacity:0;transform:translateY(9px)}
+  to{opacity:1;transform:none}
+}
 .q-num{
   font-family:"Courier Prime",monospace;font-size:11.5px;
   letter-spacing:.16em;color:var(--carbon);text-transform:uppercase;
@@ -163,7 +186,10 @@ p:last-child{margin-bottom:0}
 }
 .submit:hover{background:var(--stamp)}
 .submit:focus-visible{outline:2px solid var(--stamp);outline-offset:4px}
+.submit[data-locked]{display:none}
+.submit.reveal{display:inline-block;animation:slidein .34s cubic-bezier(.2,.7,.3,1) both}
 
+/* ---------- verdict ---------- */
 .verdict{
   margin-top:30px;padding-top:24px;border-top:1px solid var(--rule);
   display:none;
@@ -186,6 +212,60 @@ p:last-child{margin-bottom:0}
   font-family:"Courier Prime",monospace;font-size:14px;line-height:1.65;
   margin:20px 0 0;max-width:52ch;color:#3c4136;
 }
+.refcode{
+  font-family:"Courier Prime",monospace;font-size:11.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--carbon);
+  margin:14px 0 0;
+}
+
+/* ---------- the gate ---------- */
+.gate{
+  position:fixed;inset:0;z-index:60;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:var(--wall);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 32%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.022) 0 1px, transparent 1px 4px);
+}
+.gate-inner{max-width:720px;margin:0 auto;padding:0 20px 70px}
+.notice{
+  font-family:"Courier Prime",monospace;
+  font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  border-bottom:2px solid var(--ink);
+  padding:14px 0 10px;margin-bottom:30px;
+  display:flex;flex-wrap:wrap;gap:6px 22px;justify-content:space-between;
+}
+.notice b{color:var(--stamp);font-weight:700}
+.gate-head{
+  font-family:"Courier Prime",monospace;font-weight:700;
+  font-size:clamp(1.35rem,4.6vw,2rem);line-height:1.15;
+  letter-spacing:.02em;margin:0 0 18px;text-transform:uppercase;
+}
+.gate-lede{max-width:52ch;margin:0 0 6px}
+.applicant{
+  margin:26px 0 0;padding:16px 0 0;border-top:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;gap:4px 34px;
+  font-family:"Courier Prime",monospace;font-size:12.5px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--carbon);
+}
+.applicant b{color:var(--ink);font-weight:700}
+.applicant .flag{color:var(--stamp)}
+.gate-form{margin-top:32px}
+
+/* ---------- provisional bar ---------- */
+.provisional{
+  position:sticky;top:0;z-index:40;
+  align-items:center;flex-wrap:wrap;gap:4px 20px;
+  background:var(--ink);color:var(--paper);
+  padding:9px 20px;
+  font-family:"Courier Prime",monospace;
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+}
+.provisional .dot{
+  width:7px;height:7px;flex:none;border-radius:50%;
+  background:var(--stamp);
+}
+.provisional .sep{opacity:.5}
 
 /* ---------- data rows ---------- */
 .rows{border-top:1px solid var(--rule)}
@@ -201,6 +281,10 @@ p:last-child{margin-bottom:0}
 }
 .row dd{margin:0;flex:1 1 220px;font-weight:500}
 .row dd em{font-style:normal;color:var(--carbon);font-weight:400}
+.row dd.answer{
+  font-family:"Courier Prime",monospace;font-size:15px;font-weight:400;
+}
+.row dd.answer.blank{color:var(--carbon)}
 
 /* ---------- checklist ---------- */
 .check{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
@@ -221,6 +305,19 @@ p:last-child{margin-bottom:0}
   font-family:"Courier Prime",monospace;font-size:11.5px;
   letter-spacing:.11em;text-transform:uppercase;color:var(--carbon);
   margin-top:2px;
+}
+
+/* ---------- filed record ---------- */
+.filed{
+  margin-top:24px;padding-top:20px;border-top:1px solid var(--rule);
+  font-family:"Courier Prime",monospace;font-size:12px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--carbon);
+  display:flex;flex-wrap:wrap;gap:6px 28px;align-items:center;
+}
+.filed .no{
+  color:var(--stamp);border:2px solid var(--stamp);
+  padding:2px 10px 3px;font-weight:700;
+  transform:rotate(-1.5deg);
 }
 
 /* ---------- contact ---------- */
@@ -259,154 +356,411 @@ p:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header class="dept">
-    <b>Form 4B · Residency Assessment</b>
-    <span>Point Park University · Cinema Arts · Production 2</span>
-  </header>
+<!-- ===================== GATE ===================== -->
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-head">
+  <div class="gate-inner">
 
-  <section class="sheet hero">
-    <h1 class="title"><span class="typed">HELLO</span></h1>
-    <p class="logline">A man is locked out of his apartment. The locksmith needs to be satisfied that it is emotionally his.</p>
-    <div class="specs">
-      <span><b>4 min</b> · comedy</span>
-      <span>Written &amp; directed by <b>Wesley Lucas</b></span>
-      <span>Fall <b>2026</b></span>
+    <div class="notice">
+      <span><b>Notice of restricted access</b></span>
+      <span>Form 4B · Residency Assessment</span>
     </div>
-  </section>
 
-  <section class="sheet">
-    <div class="sec"><span>Section I — Assessment</span><span>Complete in full</span></div>
-    <h2>Before you continue, the door has some questions.</h2>
+    <section class="sheet">
+      <h1 class="gate-head" id="gate-head">This file is not available to the general public.</h1>
+      <p class="gate-lede">Access requires a completed residency assessment. The assessment is brief. Most applicants finish it in under two minutes.</p>
+      <p class="gate-lede">There are no incorrect answers. There are, however, answers.</p>
 
-    <form id="assess" novalidate>
-      <div class="q">
-        <span class="q-num">Question one</span>
-        <p class="q-text">Whose apartment is this?</p>
-        <input class="field" id="q1" type="text" placeholder="Type your answer" autocomplete="off">
+      <div class="applicant">
+        <span>Applicant <b id="applicant-no">————</b></span>
+        <span id="application-count">First application</span>
+        <span class="flag" id="application-flag" hidden></span>
       </div>
 
-      <div class="q">
-        <span class="q-num">Question two</span>
-        <p class="q-text">Does it agree?</p>
-        <div class="choices">
-          <label class="choice"><input type="radio" name="q2" value="yes">It does</label>
-          <label class="choice"><input type="radio" name="q2" value="no">It does not</label>
-          <label class="choice"><input type="radio" name="q2" value="unsure">I have never asked</label>
+      <form class="gate-form" id="assess" novalidate>
+
+        <div class="q" data-q="q1">
+          <span class="q-num">Question one</span>
+          <p class="q-text">Whose apartment is this?</p>
+          <input class="field" id="q1" type="text" placeholder="Type your answer" autocomplete="off">
+        </div>
+
+        <div class="q" data-q="q1b" data-locked>
+          <span class="q-num">Question one — subsection B</span>
+          <p class="q-text" id="q1b-text">You seem certain. How long have you been certain?</p>
+          <input class="field" id="q1b" type="text" placeholder="Type your answer" autocomplete="off">
+        </div>
+
+        <div class="q" data-q="q2" data-locked>
+          <span class="q-num">Question two</span>
+          <p class="q-text">Does it agree?</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="q2" value="yes">It does</label>
+            <label class="choice"><input type="radio" name="q2" value="no">It does not</label>
+            <label class="choice"><input type="radio" name="q2" value="unsure">I have never asked</label>
+          </div>
+        </div>
+
+        <div class="q" data-q="q7" data-locked>
+          <span class="q-num">Question seven</span>
+          <p class="q-text">When you come home and nobody is there, do you say anything?</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="q7" value="hello">I say hello</label>
+            <label class="choice"><input type="radio" name="q7" value="silent">I don't</label>
+          </div>
+        </div>
+
+        <div class="q" data-q="q7b" data-locked>
+          <span class="q-num">Question seven — subsection B</span>
+          <p class="q-text" id="q7b-text">To whom?</p>
+          <input class="field" id="q7b" type="text" placeholder="Type your answer" autocomplete="off">
+        </div>
+
+        <button class="submit" id="gate-submit" type="submit" data-locked>Submit assessment</button>
+      </form>
+
+      <div class="verdict" id="verdict" role="status" aria-live="polite">
+        <span class="stamp">DENIED</span>
+        <p class="reason" id="reason"></p>
+        <p class="refcode" id="refcode"></p>
+        <div class="links" style="margin-top:24px">
+          <a href="#" id="proceed" role="button">Proceed under provisional access</a>
         </div>
       </div>
+    </section>
 
-      <div class="q">
-        <span class="q-num">Question seven</span>
-        <p class="q-text">When you come home and nobody is there, do you say anything?</p>
-        <div class="choices">
-          <label class="choice"><input type="radio" name="q7" value="hello">I say hello</label>
-          <label class="choice"><input type="radio" name="q7" value="silent">I don't</label>
-        </div>
-      </div>
-
-      <button class="submit" type="submit">Submit assessment</button>
-    </form>
-
-    <div class="verdict" id="verdict" role="status" aria-live="polite">
-      <span class="stamp">DENIED</span>
-      <p class="reason" id="reason"></p>
+    <div class="carbon">
+      <div class="strips"><i></i><i></i><i></i></div>
+      <p class="fine">
+        <span>File copy · Applicant copy · Building copy</span>
+        <span>Retain for your records</span>
+      </p>
     </div>
-  </section>
 
-  <section class="sheet">
-    <div class="sec"><span>Section II — Synopsis</span><span>Attach if needed</span></div>
-    <h2>Everyone in the building thinks this is normal.</h2>
-    <p>Marcus has been sitting in his own hallway for two hours, kinda like waiting in limbo. When the locksmith finally arrives, he doesn't bring tools — he brings a clipboard, sits down on his toolbox, and starts running through this standardized assessment to figure out whether the apartment belongs to Marcus at all.</p>
-    <p>He is unfailingly polite. He never raises his voice, not even a little. And, honestly, he would genuinely like Marcus to pass. Meanwhile a neighbor drifts out to watch, offers a small correction about the color of the kitchen and answers the questions considerably better than Marcus does.</p>
-  </section>
+  </div>
+</div>
 
-  <section class="sheet">
-    <div class="sec"><span>Section III — Personnel</span><span>All entries required</span></div>
-    <h2>Cast &amp; crew</h2>
-    <dl class="rows">
-      <div class="row"><dt>Writer / Director</dt><dd>Wesley Lucas</dd></div>
-      <div class="row"><dt>Marcus</dt><dd>Trey Treadwell</dd></div>
-      <div class="row"><dt>Voss</dt><dd>Nico Rich</dd></div>
-      <div class="row"><dt>Greta</dt><dd>Amara Perez</dd></div>
-      <div class="row"><dt>Cinematographer</dt><dd><em>To be assigned</em></dd></div>
-      <div class="row"><dt>Editor / Sound Design</dt><dd><em>To be assigned</em></dd></div>
-      <div class="row"><dt>Location Sound</dt><dd><em>To be assigned</em></dd></div>
-    </dl>
-  </section>
+<!-- ===================== SITE ===================== -->
+<div class="site" id="site">
 
-  <section class="sheet">
-    <div class="sec"><span>Section IV — Status</span><span>Updated weekly</span></div>
-    <h2>Where the film currently is</h2>
-    <ul class="check">
-      <li><span class="box done"></span><span><span class="lab">Script locked</span><span class="when">Complete</span></span></li>
-      <li><span class="box done"></span><span><span class="lab">Table read &amp; revisions</span><span class="when">Complete</span></span></li>
-      <li><span class="box done"></span><span><span class="lab">Casting — three roles</span><span class="when">Complete</span></span></li>
-      <li><span class="box"></span><span><span class="lab">Location secured</span><span class="when">Scouting hallways</span></span></li>
-      <li><span class="box"></span><span><span class="lab">Pre-production package</span><span class="when">In progress</span></span></li>
-      <li><span class="box"></span><span><span class="lab">Principal photography</span><span class="when">One weekend · date TBA</span></span></li>
-      <li><span class="box"></span><span><span class="lab">Rough cut screening</span><span class="when">Scheduled</span></span></li>
-      <li><span class="box"></span><span><span class="lab">Final delivery</span><span class="when">End of semester showcase</span></span></li>
-    </ul>
-  </section>
-
-  <section class="sheet">
-    <div class="sec"><span>Section V — Correspondence</span><span>Keep a copy</span></div>
-    <h2>Get in touch</h2>
-    <p>Crew, hallways, and anyone who owns a very ordinary beige corridor: I would like to hear from you.</p>
-    <div class="links">
-      <a href="https://www.instagram.com/wesleylucasfilms/" target="_blank" rel="noopener">Follow on Instagram</a>
-      <a href="mailto:wesley.lucas@pointpark.edu">Email the production</a>
-    </div>
-  </section>
-
-  <div class="carbon">
-    <div class="strips"><i></i><i></i><i></i></div>
-    <p class="fine">
-      <span>File copy · Applicant copy · Building copy</span>
-      <span>Retain for your records</span>
-    </p>
+  <div class="provisional" id="provisional">
+    <span class="dot"></span>
+    <span>Applicant <b id="prov-no">————</b></span>
+    <span class="sep">·</span>
+    <span>Provisional access</span>
+    <span class="sep">·</span>
+    <span>Subject to review</span>
   </div>
 
+  <div class="wrap">
+
+    <header class="dept">
+      <b>Form 4B · Residency Assessment</b>
+      <span>Point Park University · Cinema Arts · Production 2</span>
+    </header>
+
+    <section class="sheet hero">
+      <h1 class="title"><span class="typed">HELLO</span></h1>
+      <p class="logline">A man is locked out of his apartment. The locksmith needs to be satisfied that it is emotionally his.</p>
+      <div class="specs">
+        <span><b>4 min</b> · comedy</span>
+        <span>Written &amp; directed by <b>Wesley Lucas</b></span>
+        <span>Fall <b>2026</b></span>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <div class="sec"><span>Section I — Assessment on file</span><span>Do not amend</span></div>
+      <h2>Your assessment has been retained.</h2>
+      <dl class="rows">
+        <div class="row"><dt>Q1 · Whose apartment</dt><dd class="answer" id="rec-q1">—</dd></div>
+        <div class="row"><dt>Q1b · Duration</dt><dd class="answer" id="rec-q1b">—</dd></div>
+        <div class="row"><dt>Q2 · Does it agree</dt><dd class="answer" id="rec-q2">—</dd></div>
+        <div class="row"><dt>Q7 · On returning</dt><dd class="answer" id="rec-q7">—</dd></div>
+        <div class="row"><dt>Q7b · Addressee</dt><dd class="answer" id="rec-q7b">—</dd></div>
+      </dl>
+      <div class="filed">
+        <span class="no">Denied</span>
+        <span id="rec-ref">Ref ————</span>
+        <span>Applicant may reapply in person</span>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <div class="sec"><span>Section II — Synopsis</span><span>Attach if needed</span></div>
+      <h2>Everyone in the building thinks this is normal.</h2>
+      <p>Marcus has been sitting in his own hallway for two hours, kinda like waiting in limbo. When the locksmith finally arrives, he doesn't bring tools — he brings a clipboard, sits down on his toolbox, and starts running through this standardized assessment to figure out whether the apartment belongs to Marcus at all.</p>
+      <p>He is unfailingly polite. He never raises his voice, not even a little. And, honestly, he would genuinely like Marcus to pass. Meanwhile a neighbor drifts out to watch, offers a small correction about the color of the kitchen and answers the questions considerably better than Marcus does.</p>
+    </section>
+
+    <section class="sheet">
+      <div class="sec"><span>Section III — Personnel</span><span>All entries required</span></div>
+      <h2>Cast &amp; crew</h2>
+      <dl class="rows">
+        <div class="row"><dt>Writer / Director</dt><dd>Wesley Lucas</dd></div>
+        <div class="row"><dt>Marcus</dt><dd>Trey Treadwell</dd></div>
+        <div class="row"><dt>Voss</dt><dd>Nico Rich</dd></div>
+        <div class="row"><dt>Greta</dt><dd>Amara Perez</dd></div>
+        <div class="row"><dt>Cinematographer</dt><dd><em>To be assigned</em></dd></div>
+        <div class="row"><dt>Editor / Sound Design</dt><dd><em>To be assigned</em></dd></div>
+        <div class="row"><dt>Location Sound</dt><dd><em>To be assigned</em></dd></div>
+      </dl>
+    </section>
+
+    <section class="sheet">
+      <div class="sec"><span>Section IV — Status</span><span>Updated weekly</span></div>
+      <h2>Where the film currently is</h2>
+      <ul class="check">
+        <li><span class="box done"></span><span><span class="lab">Script locked</span><span class="when">Complete</span></span></li>
+        <li><span class="box done"></span><span><span class="lab">Table read &amp; revisions</span><span class="when">Complete</span></span></li>
+        <li><span class="box done"></span><span><span class="lab">Casting — three roles</span><span class="when">Complete</span></span></li>
+        <li><span class="box"></span><span><span class="lab">Location secured</span><span class="when">Scouting hallways</span></span></li>
+        <li><span class="box"></span><span><span class="lab">Pre-production package</span><span class="when">In progress</span></span></li>
+        <li><span class="box"></span><span><span class="lab">Principal photography</span><span class="when">One weekend · date TBA</span></span></li>
+        <li><span class="box"></span><span><span class="lab">Rough cut screening</span><span class="when">Scheduled</span></span></li>
+        <li><span class="box"></span><span><span class="lab">Final delivery</span><span class="when">End of semester showcase</span></span></li>
+      </ul>
+    </section>
+
+    <section class="sheet">
+      <div class="sec"><span>Section V — Statement of intent</span><span>Applicant's own words</span></div>
+      <h2>Why this one.</h2>
+      <p>I wanted to write about the specific feeling of being asked to prove something you have never once had to put into words. Marcus knows the apartment is his. He has no idea how to demonstrate it. The whole film lives in the gap between those two facts.</p>
+      <p>Voss is not a villain. He is the most reasonable person in the hallway, and that is exactly what makes him unbearable. He would genuinely like Marcus to pass. He didn't write the questions and he can't change them. Every cruelty in the film is procedural, and nobody in it is being cruel.</p>
+      <p>I kept it to four minutes because the premise is a pressure system, and pressure systems stop being funny the moment you explain them. The neighbor answers better than Marcus does because she has thought about it. That's the joke, and it's also the part that bothers me.</p>
+    </section>
+
+    <section class="sheet">
+      <div class="sec"><span>Section VI — Supporting documentation</span><span>Retain originals</span></div>
+      <h2>Process</h2>
+      <dl class="rows">
+        <div class="row"><dt>Shooting script</dt><dd><em>On file — not yet released</em></dd></div>
+        <div class="row"><dt>Shot list</dt><dd><em>Pending</em></dd></div>
+        <div class="row"><dt>Lookbook</dt><dd><em>Pending</em></dd></div>
+        <div class="row"><dt>Location scouts</dt><dd><em>In progress</em></dd></div>
+        <div class="row"><dt>Production stills</dt><dd><em>Awaiting photography</em></dd></div>
+      </dl>
+    </section>
+
+    <section class="sheet">
+      <div class="sec"><span>Section VII — Correspondence</span><span>Keep a copy</span></div>
+      <h2>Get in touch</h2>
+      <p>Crew, hallways, and anyone who owns a very ordinary beige corridor: I would like to hear from you.</p>
+      <div class="links">
+        <a href="https://www.instagram.com/wesleylucasfilms/" target="_blank" rel="noopener">Follow on Instagram</a>
+        <a href="mailto:wesley.lucas@pointpark.edu">Email the production</a>
+      </div>
+    </section>
+
+    <div class="carbon">
+      <div class="strips"><i></i><i></i><i></i></div>
+      <p class="fine">
+        <span>File copy · Applicant copy · Building copy</span>
+        <span>Retain for your records</span>
+      </p>
+    </div>
+
+  </div>
 </div>
 
 <script>
 (function(){
-  var form = document.getElementById('assess');
-  var verdict = document.getElementById('verdict');
-  var reason = document.getElementById('reason');
+  "use strict";
 
+  /* ---- storage with fallback (localStorage throws in some private modes) ---- */
+  var mem = {};
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return k in mem ? mem[k] : null; } }
+  function set(k,v){ try { localStorage.setItem(k,v); } catch(e){ mem[k] = v; } }
+
+  var body = document.body;
+  var form = document.getElementById('assess');
+  if(!form) return;
+
+  /* Arm the gate. Until this line runs the site is simply visible,
+     so a JS failure degrades to an open site rather than a locked door. */
+  body.classList.add('gated');
+
+  /* ---- applicant identity ---- */
+  var id = get('f4b.applicant');
+  if(!id || !/^\d{4}$/.test(id)){
+    id = String(Math.floor(Math.random()*9999) + 1);
+    while(id.length < 4){ id = '0' + id; }
+    set('f4b.applicant', id);
+  }
+  var count = parseInt(get('f4b.applications') || '0', 10);
+  if(isNaN(count) || count < 0){ count = 0; }
+  count += 1;
+  set('f4b.applications', String(count));
+
+  var ORDINALS = ['','First','Second','Third','Fourth','Fifth','Sixth',
+                  'Seventh','Eighth','Ninth','Tenth'];
+
+  function countLabel(n){
+    if(n <= 10){ return ORDINALS[n] + ' application'; }
+    return 'Application no. ' + n;
+  }
+  function countFlag(n){
+    if(n === 2){ return 'Previous application denied'; }
+    if(n === 3){ return 'Previous applications denied'; }
+    if(n >= 4 && n < 8){ return 'This frequency has been noted'; }
+    if(n >= 8){ return 'File flagged for review'; }
+    return '';
+  }
+
+  document.getElementById('applicant-no').textContent = id;
+  document.getElementById('prov-no').textContent = id;
+  document.getElementById('application-count').textContent = countLabel(count);
+  var flagEl = document.getElementById('application-flag');
+  var flagTxt = countFlag(count);
+  if(flagTxt){ flagEl.textContent = flagTxt; flagEl.hidden = false; }
+
+  /* ---- progressive reveal ---- */
+  function qEl(name){ return form.querySelector('[data-q="' + name + '"]'); }
+  function reveal(el){
+    if(!el || !el.hasAttribute('data-locked')) return;
+    el.removeAttribute('data-locked');
+    el.classList.add('reveal');
+  }
   function pick(name){
-    var el = form.querySelector('input[name="'+name+'"]:checked');
+    var el = form.querySelector('input[name="' + name + '"]:checked');
     return el ? el.value : null;
   }
 
+  var q1 = document.getElementById('q1');
+  var q1b = document.getElementById('q1b');
+  var q7b = document.getElementById('q7b');
+  var submitBtn = document.getElementById('gate-submit');
+
+  /* The submit button unlocks on the three core answers only, so a
+     follow-up that never fires can't strand anyone inside the gate. */
+  function checkComplete(){
+    if(q1.value.trim() && pick('q2') && pick('q7')){ reveal(submitBtn); }
+  }
+
+  var FIRST_PERSON = /\b(me|mine|my|i|i'm|im|myself|us|ours)\b/i;
+
+  var q1timer;
+  q1.addEventListener('input', function(){
+    clearTimeout(q1timer);
+    q1timer = setTimeout(function(){
+      if(q1.value.trim().length < 2) return;
+      document.getElementById('q1b-text').textContent = FIRST_PERSON.test(q1.value)
+        ? 'You seem certain. How long have you been certain?'
+        : 'You have given a name. Spell it as it appears on the lease.';
+      reveal(qEl('q1b'));
+      checkComplete();
+    }, 620);
+  });
+
+  var q1btimer;
+  q1b.addEventListener('input', function(){
+    clearTimeout(q1btimer);
+    q1btimer = setTimeout(function(){
+      if(q1b.value.trim().length < 1) return;
+      reveal(qEl('q2'));
+      checkComplete();
+    }, 620);
+  });
+
+  form.addEventListener('change', function(e){
+    var t = e.target;
+    if(t.name === 'q2'){
+      reveal(qEl('q7'));
+    }
+    if(t.name === 'q7'){
+      document.getElementById('q7b-text').textContent = (t.value === 'hello')
+        ? 'To whom?'
+        : 'The unit has recorded no greeting. Is that your preference, or a habit?';
+      reveal(qEl('q7b'));
+    }
+    checkComplete();
+  });
+
+  /* A stalled reveal chain should never trap someone. */
+  setTimeout(function(){
+    reveal(qEl('q2')); reveal(qEl('q7')); reveal(submitBtn);
+  }, 45000);
+
+  /* ---- verdict ---- */
+  var LETTERS = 'ABCDEFGHJKLMNPRSTUVWXYZ';
+
+  function reasonFor(a){
+    if(!a.q1){
+      return 'Question one was left blank. This has been recorded as an answer.';
+    }
+    if(a.q7 === 'hello' && a.q7b){
+      return 'You say hello to ' + a.q7b + '. The unit has no record of receiving it.';
+    }
+    if(a.q7 === 'hello'){
+      return 'You say hello. The apartment has no record of hearing it.';
+    }
+    if(a.q2 === 'yes'){
+      return 'You state that the apartment agrees. The apartment was not consulted.';
+    }
+    if(a.q2 === 'unsure'){
+      return 'Twenty-two years is the current average. You are within normal range, which is not the same as passing.';
+    }
+    if(a.q2 === 'no'){
+      return 'You and the unit are in agreement that you are not in agreement. This is noted as a partial result.';
+    }
+    return 'Your answers were consistent, which is not the same as correct.';
+  }
+
+  var answers = null;
+  var refcode = '';
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    var q1 = document.getElementById('q1').value.trim();
-    var q2 = pick('q2');
-    var q7 = pick('q7');
-    var note;
 
-    if(!q1){
-      note = 'Question one was left blank. This has been recorded as an answer.';
-    } else if(q7 === 'hello'){
-      note = 'You say hello. The apartment has no record of hearing it. Assessment closed.';
-    } else if(q2 === 'yes'){
-      note = 'You state that the apartment agrees. The apartment was not consulted.';
-    } else if(q2 === 'unsure'){
-      note = 'Twenty-two years is the current average. You may reapply at any time.';
-    } else {
-      note = 'Your answers were consistent, which is not the same as correct.';
-    }
+    answers = {
+      q1: q1.value.trim(),
+      q1b: q1b.value.trim(),
+      q2: pick('q2'),
+      q7: pick('q7'),
+      q7b: q7b.value.trim()
+    };
 
-    reason.textContent = note + ' Applicant may reapply in person. Bring the form.';
+    refcode = 'Ref 4B/' + id.slice(0,2) + '-' +
+              LETTERS.charAt((count - 1) % LETTERS.length) + count;
+
+    document.getElementById('reason').textContent =
+      reasonFor(answers) + ' Applicant may reapply in person. Bring the form.';
+    document.getElementById('refcode').textContent = refcode;
+
+    var verdict = document.getElementById('verdict');
     verdict.classList.remove('show');
     void verdict.offsetWidth;
     verdict.classList.add('show');
-    verdict.scrollIntoView({behavior:'smooth', block:'nearest'});
+    verdict.scrollIntoView({ behavior:'smooth', block:'nearest' });
   });
+
+  /* ---- unlock ---- */
+  var LABEL_Q2 = { yes:'It does', no:'It does not', unsure:'I have never asked' };
+  var LABEL_Q7 = { hello:'I say hello', silent:"I don't" };
+
+  function put(elId, value){
+    var el = document.getElementById(elId);
+    if(value){ el.textContent = value; el.classList.remove('blank'); }
+    else { el.textContent = 'No answer recorded'; el.classList.add('blank'); }
+  }
+
+  document.getElementById('proceed').addEventListener('click', function(e){
+    e.preventDefault();
+    if(answers){
+      put('rec-q1',  answers.q1);
+      put('rec-q1b', answers.q1b);
+      put('rec-q2',  LABEL_Q2[answers.q2]);
+      put('rec-q7',  LABEL_Q7[answers.q7]);
+      put('rec-q7b', answers.q7b);
+      document.getElementById('rec-ref').textContent = refcode;
+    }
+    body.classList.remove('gated');
+    body.classList.add('cleared');
+    window.scrollTo(0,0);
+  });
+
+  /* focus the first field once the door is up */
+  try { q1.focus({ preventScroll:true }); } catch(err){ q1.focus(); }
 })();
 </script>
 </body>
